@@ -1,0 +1,38 @@
+#!/bin/sh -e
+# mock version of "git" for use in tests
+#
+# make sure this is earlier in $PATH than the real one!
+#
+# TODO: log the invocations somewhere so we can verify
+#       in tests that the proper commands were run
+
+unhandled() {
+  echo "mock: unhandled command: git $*" >&2
+  exit 1
+}
+
+case "$*" in
+clone*)
+  echo "mock cloning $2"
+  echo "Some README stuff" > $3/README.md
+  ;;
+add*|checkout*|fetch*|remote*|*"commit -m"*|push*)
+  echo "mock: $*"
+  ;;
+"config --list --null")
+  printf 'branch.main.remote\norigin'
+  ;;
+"branch -v")
+  echo '* default-commit-msg abcd1234 blah'
+  ;;
+"status --porcelain -b -u --null")
+  if grep -q changes README.md; then
+    printf '## main\0 M README.md\0'
+  else 
+    printf '## main\0'
+  fi
+  ;;
+*)
+  unhandled "$*"
+  ;;
+esac
