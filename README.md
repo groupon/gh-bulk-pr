@@ -45,7 +45,7 @@ Options:
 ```
 
 This command allows you to create Bulk PRs, with repeatable commands, across
-a given list of PRs.
+a given list of repositories.
 
 ## Examples
 

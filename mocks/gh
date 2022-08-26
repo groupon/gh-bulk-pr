@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 
 if [ "$*" != "auth status --show-token" ]; then
   echo "unhandled mock gh invocation: gh $*" >&2
